@@ -10,29 +10,42 @@ import SwiftUI
     FrameworkGridView()
 }
 
-var column: [GridItem] = [GridItem(.flexible()),
-                          GridItem(.flexible()),
-                          GridItem(.flexible())]
 
 
 struct FrameworkGridView: View{
+    
+    @StateObject var viewModel = FrameworkGridViewModel()
+    // when initiliazing a brand new view model we use a @StateObject but if we are injecting from a previous model we use observed object
+    
+    
+    var column: [GridItem] = [GridItem(.flexible()),
+                              GridItem(.flexible()),
+                              GridItem(.flexible())]
+
     var body: some View {
         NavigationView{
             ScrollView{
                 LazyVGrid(columns: column){
                     ForEach(MockData.frameworks){framework in
-                        appIconView(framework: framework)
+                        frameworkTitleView(framework: framework)
+                            .onTapGesture {
+                                viewModel.selectedFramework = framework
+                            }
                     }
                 }
             }
             .navigationTitle("🍎 Framework" )
+            .sheet(isPresented: $viewModel.isShowingDetailView){
+                FrameworkDetailView(framework: viewModel.selectedFramework ?? MockData.sampleFramework,
+                            isShowingDetailView: $viewModel.isShowingDetailView)
+            }
         }
     }
 }
 
 
-struct appIconView: View {
-    let framework: Framework 
+struct frameworkTitleView: View {
+    let framework: Framework
    
     var body: some View{
         VStack{
