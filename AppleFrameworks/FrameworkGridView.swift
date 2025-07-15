@@ -5,60 +5,49 @@
 //  Created by Misson Paudel on 13/07/2025.
 //
 //
-//import SwiftUI
-//
-//struct FrameworkGridView: View {
-//    
-//    let columns: [GridItem] = [GridItem(.flexible()),
-//                               GridItem(.flexible()),
-//                               GridItem(.flexible())]
-//    var body: some View {
-//        LazyVGrid(columns: columns){
-//            FrameworkTitleView(name: "App Clip", imageName: "app-clip")
-//            FrameworkTitleView(name: "App Clip", imageName: "app-clip")
-//            FrameworkTitleView(name: "App Clip", imageName: "app-clip")
-//            FrameworkTitleView(name: "App Clip", imageName: "app-clip")
-//            FrameworkTitleView(name: "App Clip", imageName: "app-clip")
-//        }
-//    }
-//}
-//
+import SwiftUI
 #Preview {
     FrameworkGridView()
 }
-//
-//struct FrameworkTitleView: View{
-//    let name: String
-//    let imageName: String
-//    
-//    var body: some View{
-//        
-//        VStack{
-//            Image(imageName)
-//                .resizable()
-//                .frame(width: 90, height: 90)
-//            Text(name)
-//                .font(.title2)
-//                .fontWeight(.semibold)
-//                .scaledToFit()
-//                .minimumScaleFactor(0.5)
-//            
-//        }
-//    }
-//}
 
-import SwiftUI
+var column: [GridItem] = [GridItem(.flexible()),
+                          GridItem(.flexible()),
+                          GridItem(.flexible())]
+
 
 struct FrameworkGridView: View{
-    var body:some  View{
-        VStack{
-            Image("app-clip")
-                .resizable()
-                .frame(width: 90, height: 90)
-            Text("App Clip")
-                .font(.title2)
-                .
-            
+    var body: some View {
+        NavigationView{
+            ScrollView{
+                LazyVGrid(columns: column){
+                    ForEach(MockData.frameworks){framework in
+                        appIconView(framework: framework)
+                    }
+                }
+            }
+            .navigationTitle("🍎 Framework" )
         }
     }
 }
+
+
+struct appIconView: View {
+    let framework: Framework 
+   
+    var body: some View{
+        VStack{
+             Image(framework.imageName)
+                .resizable()
+                .frame(width: 90, height: 90)
+            
+            Text(framework.name)
+                .font (.title2)
+                .fontWeight(.semibold)
+                .scaledToFit()
+                .minimumScaleFactor(0.5)
+        }
+        .padding(15)
+    }
+}
+
+
